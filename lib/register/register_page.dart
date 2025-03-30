@@ -48,15 +48,19 @@ class _RegisterPageState extends State<RegisterPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // App Logo
-                Icon(
-                  Icons.android, 
-                  size: 100
+                // Icon(
+                //   Icons.android, 
+                //   size: 100
+                // ),
+                Image.asset(
+                  'images/google.png', // Replace with app logo
+                  height: 100,
                 ),
                 SizedBox(height: 50),
                 
                 // Hello again!
                 Text(
-                  'Hello There!',
+                  'M-Checker',
                   style: GoogleFonts.bebasNeue(
                     fontSize: 52,
                   ),
@@ -84,6 +88,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         borderSide: BorderSide(color: Colors.blueAccent),
                         borderRadius: BorderRadius.circular(12),
                       ),
+                      prefixIcon: const Icon(Icons.email_outlined, color: Colors.blueAccent),
                       hintText: 'Email',
                       fillColor: Colors.grey[200],
                       filled: true,
@@ -107,6 +112,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         borderSide: BorderSide(color: Colors.blueAccent),
                         borderRadius: BorderRadius.circular(12),
                       ),
+                      prefixIcon: const Icon(Icons.lock_outlined, color: Colors.blueAccent),
                       hintText: 'Password',
                       fillColor: Colors.grey[200],
                       filled: true,
@@ -130,6 +136,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         borderSide: BorderSide(color: Colors.blueAccent),
                         borderRadius: BorderRadius.circular(12),
                       ),
+                      prefixIcon: const Icon(Icons.lock_person_outlined, color: Colors.blueAccent),
                       hintText: 'Confirm Password',
                       fillColor: Colors.grey[200],
                       filled: true,
