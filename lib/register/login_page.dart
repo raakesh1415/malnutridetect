@@ -17,24 +17,34 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
 
   Future signIn() async {
+    try {
+      showDialog(
+        context: context, 
+        builder: (context) => Center(child: CircularProgressIndicator()),
+      );
 
-    //loading circle
-    showDialog(
-      context: context, 
-      builder: (context) {
-        return Center(child: CircularProgressIndicator());
-      }
-    );
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text.trim(), 
+        password: _passwordController.text.trim(),
+      );
 
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: _emailController.text.trim(), 
-      password: _passwordController.text.trim(),
-    );
-
-    // pop the loading circle
-    if (!mounted) return;
-    Navigator.of(context).pop();
+      if (!mounted) return;
+      Navigator.of(context).pop();
+    } on FirebaseAuthException catch (e) {
+      Navigator.of(context).pop();
+      showDialog(
+        context: context, 
+        builder: (context) => AlertDialog(
+          title: Text("Error"),
+          content: Text(e.message ?? "Unknown error occurred"),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(context), child: Text("OK"))
+          ],
+        ),
+      );
+    }
   }
+
 
   @override
   void dispose() {
@@ -54,10 +64,6 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // App Logo
-                // Icon(
-                //   Icons.android, 
-                //   size: 100
-                // ),
                 Image.asset(
                   'images/google.png', // Replace with app logo
                   height: 100,
@@ -159,51 +165,6 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 SizedBox(height: 20),
             
-                // // email textfield
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                //   child: Container(
-                //     decoration: BoxDecoration(
-                //       color: Colors.grey[200],
-                //       border: Border.all(color: Colors.white),
-                //       borderRadius: BorderRadius.circular(12),
-                //     ),
-                //     child: Padding(
-                //       padding: const EdgeInsets.only(left: 20.0),
-                //       child: TextField(
-                //         decoration: InputDecoration(
-                //           border: InputBorder.none,
-                //           hintText: 'Email',
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                // SizedBox(height: 10),
-            
-                // // password textfield
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                //   child: Container(
-                //     decoration: BoxDecoration(
-                //       color: Colors.grey[200],
-                //       border: Border.all(color: Colors.white),
-                //       borderRadius: BorderRadius.circular(12),
-                //     ),
-                //     child: Padding(
-                //       padding: const EdgeInsets.only(left: 20.0),
-                //       child: TextField(
-                //         obscureText: true,
-                //         decoration: InputDecoration(
-                //           border: InputBorder.none,
-                //           hintText: 'Password',
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                // SizedBox(height: 20),
-            
                 // sign in button
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -251,7 +212,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ],
                 )
-            
               ],
             ),
           ),
