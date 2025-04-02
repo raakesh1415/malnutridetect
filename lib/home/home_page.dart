@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:malnutridetect/graph/pricePoints.dart';
+import 'package:malnutridetect/graph/line_chart_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,8 +21,12 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     // Get current date in Malaysia timezone
-    DateTime now = DateTime.now().toUtc().add(Duration(hours: 8)); // Malaysia is UTC+8
-    String formattedDate = DateFormat('MMM dd').format(now); // Example: "Dec 26"
+    DateTime now = DateTime.now().toUtc().add(
+      Duration(hours: 8),
+    ); // Malaysia is UTC+8
+    String formattedDate = DateFormat(
+      'MMM dd',
+    ).format(now); // Example: "Dec 26"
     String formattedDay = DateFormat('EEEE').format(now); // Example: "Tuesday"
 
     return Scaffold(
@@ -55,10 +62,7 @@ class _HomePageState extends State<HomePage> {
             ),
             Text(
               formattedDay, // Display the formatted day
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.blue[700],
-              ),
+              style: TextStyle(fontSize: 18, color: Colors.blue[700]),
             ),
             SizedBox(height: 30),
             Text(
@@ -88,10 +92,13 @@ class _HomePageState extends State<HomePage> {
               title: "Track Growth",
               subtitle: "Monitor your growth progress.",
               onTap: () {
-                // Perform action for "Track Growth"
-                _handleCardAction("Track Growth", 1);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LineChartScreen()),
+                );
               },
             ),
+
             SizedBox(height: 30),
             Text(
               "AI Assistance",
@@ -123,15 +130,14 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             // SizedBox(height: 10),
-            // Text('Signed In as: ${user.email!}'), 
+            // Text('Signed In as: ${user.email!}'),
             MaterialButton(
               onPressed: () {
                 FirebaseAuth.instance.signOut();
               },
               color: Colors.blueAccent[200],
               child: Text('Sign Out'),
-            )
-
+            ),
           ],
         ),
       ),
@@ -147,15 +153,22 @@ class _HomePageState extends State<HomePage> {
     Color? buttonColor,
     required Function onTap,
   }) {
-    bool isSelected = _selectedCardIndex == index; // Check if the card is selected
+    bool isSelected =
+        _selectedCardIndex == index; // Check if the card is selected
 
     return GestureDetector(
       onTap: () => onTap(),
       child: Card(
-        color: isSelected ? Colors.blue[200] : Colors.blue[100], // Highlight selected card
+        color:
+            isSelected
+                ? Colors.blue[200]
+                : Colors.blue[100], // Highlight selected card
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
-          side: isSelected ? BorderSide(color: Colors.blue[700]!, width: 2) : BorderSide.none,
+          side:
+              isSelected
+                  ? BorderSide(color: Colors.blue[700]!, width: 2)
+                  : BorderSide.none,
         ),
         child: ListTile(
           leading: Icon(icon, color: Colors.blue[900], size: 36),
@@ -186,14 +199,18 @@ class _HomePageState extends State<HomePage> {
                       backgroundColor: buttonColor,
                     ),
                     onPressed: () => onTap(),
-                    child: Text(buttonText, style: TextStyle(color: Colors.white)),
+                    child: Text(
+                      buttonText,
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ),
             ],
           ),
-          trailing: buttonText == null
-              ? Icon(Icons.arrow_forward_ios, color: Colors.blue[700])
-              : null,
+          trailing:
+              buttonText == null
+                  ? Icon(Icons.arrow_forward_ios, color: Colors.blue[700])
+                  : null,
         ),
       ),
     );
