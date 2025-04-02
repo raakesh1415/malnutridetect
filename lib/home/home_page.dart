@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:malnutridetect/graph/pricePoints.dart';
 import 'package:malnutridetect/graph/line_chart_screen.dart';
+import 'package:malnutridetect/chatbot/chatbotScreen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -125,8 +126,12 @@ class _HomePageState extends State<HomePage> {
               title: "AI Chatbot",
               subtitle: "Ask the AI chatbot for guidance.",
               onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ChatbotScreen()),
+                );
                 // Perform action for "AI Chatbot"
-                _handleCardAction("AI Chatbot", 3);
+                //_handleCardAction("AI Chatbot", 3);
               },
             ),
             // SizedBox(height: 10),
