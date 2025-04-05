@@ -1,70 +1,138 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class ChatbotScreen extends StatefulWidget {
+class ChatbotPage extends StatefulWidget {
   @override
-  _ChatbotScreenState createState() => _ChatbotScreenState();
+  _ChatbotPageState createState() => _ChatbotPageState();
 }
 
-class _ChatbotScreenState extends State<ChatbotScreen> {
-  TextEditingController _controller = TextEditingController();
-  List<String> messages = [];
+class _ChatbotPageState extends State<ChatbotPage> {
+  final TextEditingController _nameController = TextEditingController();
+  final List<String> _messages = [];
 
-  void _sendMessage() {
-    if (_controller.text.isNotEmpty) {
-      setState(() {
-        messages.add("You: ${_controller.text}");
-        messages.add(
-          "Bot: ${_controller.text} (Response)",
-        ); // Simulated bot response
-      });
-      _controller.clear();
-    }
+  void _handleSubmit() {
+    final input = _nameController.text.trim();
+    if (input.isEmpty) return;
+    setState(() {
+      _messages.add("You: $input");
+      _messages.add("Bot: $input");
+    });
+    _nameController.clear();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("AI Chatbot"),
-        backgroundColor: Colors.blue[400],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount: messages.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4.0),
-                    child: Text(messages[index]),
-                  );
-                },
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Colors.blue.shade100, Colors.white],
               ),
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    decoration: InputDecoration(
-                      hintText: "Type your message...",
-                      filled: true, // Enable filling the background
-                      fillColor:
-                          Colors.blue[400], // Set the background color here
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide:
-                            BorderSide.none, // Remove border for a clean look
+          ),
+          SafeArea(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      CircleAvatar(
+                        radius: 24,
+                        backgroundColor: Colors.white,
+                        child: Icon(Icons.android, size: 30, color: Colors.blueAccent),
                       ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: _messages.length,
+                      itemBuilder: (context, index) {
+                        return _buildChatBubble(_messages[index]);
+                      },
                     ),
                   ),
-                ),
-                IconButton(icon: Icon(Icons.send), onPressed: _sendMessage),
-              ],
+                  Row(
+                    children: [
+                      Expanded(child: _buildInputField()),
+                      SizedBox(width: 10),
+                      IconButton(
+                        icon: Icon(Icons.send, color: Colors.blueAccent),
+                        onPressed: _handleSubmit,
+                      ),
+                    ],
+                  ),
+                  _buildAlternativeOption(),
+                ],
+              ),
             ),
-          ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildChatBubble(String text) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 10),
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 5,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Text(
+        text,
+        style: GoogleFonts.lato(fontSize: 16, color: Colors.black87),
+      ),
+    );
+  }
+
+  Widget _buildInputField() {
+    return TextField(
+      controller: _nameController,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.blueAccent),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        filled: true,
+        fillColor: Colors.white,
+        hintText: "Type a message",
+      ),
+      onSubmitted: (_) => _handleSubmit(),
+    );
+  }
+
+  Widget _buildAlternativeOption() {
+    return Center(
+      child: TextButton(
+        onPressed: () {},
+        child: Text(
+          "I'd prefer not to say",
+          style: TextStyle(
+            color: Colors.blueAccent,
+            fontSize: 16,
+          ),
         ),
       ),
     );

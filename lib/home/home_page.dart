@@ -49,106 +49,99 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "PROFILE"),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            SizedBox(height: 30),
-            Text(
-              formattedDate, // Display the formatted date
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.blue[900],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              SizedBox(height: 30),
+              Text(
+                formattedDate,
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue[900],
+                ),
               ),
-            ),
-            Text(
-              formattedDay, // Display the formatted day
-              style: TextStyle(fontSize: 18, color: Colors.blue[700]),
-            ),
-            SizedBox(height: 30),
-            Text(
-              "Malnutrition Tracker",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.blue[900],
+              Text(
+                formattedDay,
+                style: TextStyle(fontSize: 18, color: Colors.blue[700]),
               ),
-            ),
-            SizedBox(height: 10),
-            _buildHealthCard(
-              index: 0,
-              icon: Icons.health_and_safety,
-              title: "Check Malnutrition Risk",
-              subtitle: "Assess the malnutrition risk today!",
-              buttonText: "Check Now",
-              buttonColor: Colors.blue[700]!,
-              onTap: () {
-                // Perform action for "Check Malnutrition Risk"
-                //_handleCardAction("Check Malnutrition Risk", 0);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => InputScreen()),
-                );
-              },
-            ),
-            _buildHealthCard(
-              index: 1,
-              icon: Icons.show_chart,
-              title: "Track Growth",
-              subtitle: "Monitor your growth progress.",
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LineChartScreen()),
-                );
-              },
-            ),
-
-            SizedBox(height: 30),
-            Text(
-              "AI Assistance",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.blue[900],
+              SizedBox(height: 30),
+              Text(
+                "Malnutrition Tracker",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue[900],
+                ),
               ),
-            ),
-            SizedBox(height: 10),
-            _buildHealthCard(
-              index: 2,
-              icon: Icons.restaurant_menu,
-              title: "Nutrition Plan",
-              subtitle: "Get personalized nutrition advice.",
-              onTap: () {
-                // Perform action for "Nutrition Plan"
-                _handleCardAction("Nutrition Plan", 2);
-              },
-            ),
-            _buildHealthCard(
-              index: 3,
-              icon: Icons.chat,
-              title: "AI Chatbot",
-              subtitle: "Ask the AI chatbot for guidance.",
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ChatbotScreen()),
-                );
-                // Perform action for "AI Chatbot"
-                //_handleCardAction("AI Chatbot", 3);
-              },
-            ),
-            // SizedBox(height: 10),
-            // Text('Signed In as: ${user.email!}'),
-            MaterialButton(
-              onPressed: () {
-                FirebaseAuth.instance.signOut();
-              },
-              color: Colors.blueAccent[200],
-              child: Text('Sign Out'),
-            ),
-          ],
+              SizedBox(height: 10),
+              _buildHealthCard(
+                index: 0,
+                icon: Icons.health_and_safety,
+                title: "Check Malnutrition Risk",
+                subtitle: "Assess the malnutrition risk today!",
+                buttonText: "Check Now",
+                buttonColor: Colors.blue[700]!,
+                onTap: () {
+                  _handleCardAction("Check Malnutrition Risk", 0);
+                },
+              ),
+              _buildHealthCard(
+                index: 1,
+                icon: Icons.show_chart,
+                title: "Track Growth",
+                subtitle: "Monitor your growth progress.",
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LineChartScreen()),
+                  );
+                },
+              ),
+              SizedBox(height: 30),
+              Text(
+                "AI Assistance",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue[900],
+                ),
+              ),
+              SizedBox(height: 10),
+              _buildHealthCard(
+                index: 2,
+                icon: Icons.restaurant_menu,
+                title: "Nutrition Plan",
+                subtitle: "Get personalized nutrition advice.",
+                onTap: () {
+                  _handleCardAction("Nutrition Plan", 2);
+                },
+              ),
+              _buildHealthCard(
+                index: 3,
+                icon: Icons.chat,
+                title: "AI Chatbot",
+                subtitle: "Ask the AI chatbot for guidance.",
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ChatbotPage()),
+                  );
+                },
+              ),
+              SizedBox(height: 20),
+              MaterialButton(
+                onPressed: () {
+                  FirebaseAuth.instance.signOut();
+                },
+                color: Colors.blueAccent[200],
+                child: Text('Sign Out'),
+              ),
+              SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );
