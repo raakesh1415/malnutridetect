@@ -24,6 +24,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(backgroundColor: Colors.blue[400], title: Text("Chatbot")),
       body: Stack(
         children: [
           Container(
@@ -47,7 +48,11 @@ class _ChatbotPageState extends State<ChatbotPage> {
                       CircleAvatar(
                         radius: 24,
                         backgroundColor: Colors.white,
-                        child: Icon(Icons.android, size: 30, color: Colors.blueAccent),
+                        child: Icon(
+                          Icons.android,
+                          size: 30,
+                          color: Colors.blueAccent,
+                        ),
                       ),
                     ],
                   ),
@@ -88,11 +93,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 5,
-            offset: Offset(0, 2),
-          ),
+          BoxShadow(color: Colors.black12, blurRadius: 5, offset: Offset(0, 2)),
         ],
       ),
       child: Text(
@@ -124,17 +125,6 @@ class _ChatbotPageState extends State<ChatbotPage> {
   }
 
   Widget _buildAlternativeOption() {
-    return Center(
-      child: TextButton(
-        onPressed: () {},
-        child: Text(
-          "I'd prefer not to say",
-          style: TextStyle(
-            color: Colors.blueAccent,
-            fontSize: 16,
-          ),
-        ),
-      ),
-    );
+    return Center();
   }
 }

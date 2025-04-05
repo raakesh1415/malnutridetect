@@ -85,7 +85,12 @@ class _HomePageState extends State<HomePage> {
                 buttonText: "Check Now",
                 buttonColor: Colors.blue[700]!,
                 onTap: () {
-                  _handleCardAction("Check Malnutrition Risk", 0);
+                  // Perform action for "Check Malnutrition Risk"
+                  //_handleCardAction("Check Malnutrition Risk", 0);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => InputScreen()),
+                  );
                 },
               ),
               _buildHealthCard(
