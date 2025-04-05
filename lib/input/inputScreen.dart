@@ -25,6 +25,12 @@ class _InputScreenState extends State<InputScreen> {
       appBar: AppBar(
         backgroundColor: Colors.blue[400],
         title: Text("Malnutrition Risk Input"),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context); // Go back to the previous screen
+          },
+        ),
       ),
       backgroundColor: Colors.blue[50],
       body: Padding(
