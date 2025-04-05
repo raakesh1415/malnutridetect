@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:malnutridetect/graph/pricePoints.dart';
 import 'package:malnutridetect/graph/line_chart_screen.dart';
 import 'package:malnutridetect/chatbot/chatbotScreen.dart';
+import 'package:malnutridetect/input/inputScreen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -84,7 +85,11 @@ class _HomePageState extends State<HomePage> {
               buttonColor: Colors.blue[700]!,
               onTap: () {
                 // Perform action for "Check Malnutrition Risk"
-                _handleCardAction("Check Malnutrition Risk", 0);
+                //_handleCardAction("Check Malnutrition Risk", 0);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => InputScreen()),
+                );
               },
             ),
             _buildHealthCard(
