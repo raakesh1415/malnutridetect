@@ -7,6 +7,7 @@ import 'package:malnutridetect/graph/line_chart_screen.dart';
 import 'package:malnutridetect/chatbot/chatbotScreen.dart';
 import 'package:malnutridetect/input/inputScreen.dart';
 import 'package:malnutridetect/Profile/main_profile.dart';
+import 'package:malnutridetect/input/resultListPage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -43,7 +44,15 @@ class _HomePageState extends State<HomePage> {
           setState(() {
             _selectedIndex = index; // Update the selected index when tapped
           });
-
+          // Navigate to ProfilePage when the profile icon is tapped
+          if (index == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ResultListPage(),
+              ), // Navigate to MainProfile
+            );
+          }
           // Navigate to ProfilePage when the profile icon is tapped
           if (index == 2) {
             Navigator.push(

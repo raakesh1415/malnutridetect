@@ -2,9 +2,6 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:malnutridetect/input/resultListPage.dart';
 
 class InputScreen extends StatefulWidget {
   @override
@@ -51,17 +48,8 @@ class _InputScreenState extends State<InputScreen> {
     }
   }
 
-  dynamic findClosest(
-    List<dynamic> data,
-    String gender,
-    String field,
-    double value,
-  ) {
-    final filtered = data
-        .where(
-          (item) => item['Gender'].toLowerCase() == gender.toLowerCase(),
-        )
-        .toList();
+  dynamic findClosest(List<dynamic> data, String gender, String field, double value) {
+    final filtered = data.where((item) => item['Gender'].toLowerCase() == gender.toLowerCase()).toList();
     filtered.sort((a, b) {
       final aVal = (a[field] as num).toDouble();
       final bVal = (b[field] as num).toDouble();
@@ -86,7 +74,7 @@ class _InputScreenState extends State<InputScreen> {
     return '✅ Normal';
   }
 
-  void _submitData() async {
+  void _submitData() {
     String gender = genderController.text;
     int? age = int.tryParse(ageController.text);
     double? height = double.tryParse(heightController.text);
@@ -98,9 +86,7 @@ class _InputScreenState extends State<InputScreen> {
       final wazRow = findClosest(wazData, gender, "Month", age.toDouble());
 
       if (whzRow == null || hazRow == null || wazRow == null) {
-        setState(
-          () => resultText = "❌ Error: Could not find matching LMS data.",
-        );
+        setState(() => resultText = "❌ Error: Could not find matching LMS data.");
         return;
       }
 
@@ -126,55 +112,23 @@ class _InputScreenState extends State<InputScreen> {
       String whzResult = interpretZScore(whz ?? 0, 'WHZ');
       String hazResult = interpretZScore(haz ?? 0, 'HAZ');
       String wazResult = interpretZScore(waz ?? 0, 'WAZ');
-      bool hasRisk = [
-        whzResult,
-        hazResult,
-        wazResult,
-      ].any((r) => !r.contains("Normal"));
+      bool hasRisk = [whzResult, hazResult, wazResult].any((r) => !r.contains("Normal"));
 
-      DateTime timestamp = DateTime.now();
-      _hasRisk = hasRisk;
-      String formattedResult = """
-  🔍 Malnutrition Analysis Result:
-  • Gender: $gender
-  • Age: $age months
-  • Height: ${height}cm
-  • Weight: ${weight}kg
+      setState(() {
+        _hasRisk = hasRisk;
+        resultText = """
+🔍 Malnutrition Analysis Result:
+• Gender: $gender
+• Age: $age months
+• Height: ${height}cm
+• Weight: ${weight}kg
 
-  📊 Z-Scores:
-  • WHZ (Weight-for-Height): ${whz?.toStringAsFixed(2)} ➝ $whzResult
-  • HAZ (Height-for-Age): ${haz?.toStringAsFixed(2)} ➝ $hazResult
-  • WAZ (Weight-for-Age): ${waz?.toStringAsFixed(2)} ➝ $wazResult
-
-  🕒 Checked on: ${timestamp.toLocal().toString().substring(0, 16)}
-  """;
-
-      final user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        await FirebaseFirestore.instance
-            .collection('malnutrition_records')
-            .add({
-              'userId': user.uid,
-              'gender': gender,
-              'age': age,
-              'height': height,
-              'weight': weight,
-              'timestamp': timestamp.toIso8601String(),
-              'result': formattedResult,
-              'whz': whz, // 🔄 Added WHZ value
-              'haz': haz, // 🔄 Added HAZ value
-              'waz': waz, // 🔄 Added WAZ value
-              'whz_status': whzResult,
-              'haz_status': hazResult,
-              'waz_status': wazResult,
-              'hasRisk': hasRisk,
-            });
-
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => ResultListPage()),
-        );
-      }
+📊 Z-Scores:
+• WHZ (Weight-for-Height): ${whz?.toStringAsFixed(2)} ➝ $whzResult
+• HAZ (Height-for-Age): ${haz?.toStringAsFixed(2)} ➝ $hazResult
+• WAZ (Weight-for-Age): ${waz?.toStringAsFixed(2)} ➝ $wazResult
+""";
+      });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Please fill in all fields properly.")),
@@ -217,54 +171,34 @@ class _InputScreenState extends State<InputScreen> {
             ),
             SizedBox(height: 20),
             _buildSectionTitle("🎂 Age"),
-            _buildCard(
-              TextField(
-                controller: ageController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  hintText: "Enter your age (months)",
-                  border: InputBorder.none,
-                ),
-              ),
-            ),
+            _buildCard(TextField(
+              controller: ageController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(hintText: "Enter your age (months)", border: InputBorder.none),
+            )),
             _buildSectionTitle("📏 Height"),
-            _buildCard(
-              TextField(
-                controller: heightController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  hintText: "Enter height in cm",
-                  border: InputBorder.none,
-                ),
-              ),
-            ),
+            _buildCard(TextField(
+              controller: heightController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(hintText: "Enter height in cm", border: InputBorder.none),
+            )),
             _buildSectionTitle("⚖️ Weight"),
-            _buildCard(
-              TextField(
-                controller: weightController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  hintText: "Enter weight in kg",
-                  border: InputBorder.none,
-                ),
-              ),
-            ),
+            _buildCard(TextField(
+              controller: weightController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(hintText: "Enter weight in kg", border: InputBorder.none),
+            )),
             SizedBox(height: 30),
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue[400],
                 foregroundColor: Colors.white,
                 padding: EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
               onPressed: _submitData,
               icon: Icon(Icons.analytics_rounded),
-              label: Text(
-                "Check Malnutrition Risk",
-                style: TextStyle(fontSize: 18),
-              ),
+              label: Text("Check Malnutrition Risk", style: TextStyle(fontSize: 18)),
             ),
             if (resultText != null) _buildResultCard(resultText!),
           ],
@@ -297,13 +231,7 @@ class _InputScreenState extends State<InputScreen> {
         child: RadioListTile<String>(
           value: gender,
           groupValue: selectedGender,
-          title: Row(
-            children: [
-              Icon(icon, color: Colors.blue),
-              SizedBox(width: 8),
-              Text(gender),
-            ],
-          ),
+          title: Row(children: [Icon(icon, color: Colors.blue), SizedBox(width: 8), Text(gender)]),
           onChanged: (value) {
             setState(() {
               selectedGender = value!;
@@ -320,11 +248,7 @@ class _InputScreenState extends State<InputScreen> {
   Widget _buildSectionTitle(String title) {
     return Text(
       title,
-      style: TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-        color: Colors.blue[900],
-      ),
+      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.blue[900]),
     );
   }
 
@@ -336,13 +260,7 @@ class _InputScreenState extends State<InputScreen> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.blue.shade200),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.blue.shade100,
-            blurRadius: 4,
-            offset: Offset(0, 2),
-          ),
-        ],
+        boxShadow: [BoxShadow(color: Colors.blue.shade100, blurRadius: 4, offset: Offset(0, 2))],
       ),
       child: child,
     );
@@ -360,21 +278,11 @@ class _InputScreenState extends State<InputScreen> {
         color: cardColor,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: borderColor),
-        boxShadow: [
-          BoxShadow(
-            color: borderColor.withOpacity(0.4),
-            blurRadius: 4,
-            offset: Offset(0, 2),
-          ),
-        ],
+        boxShadow: [BoxShadow(color: borderColor.withOpacity(0.4), blurRadius: 4, offset: Offset(0, 2))],
       ),
       child: Text(
         result,
-        style: TextStyle(
-          fontSize: 16,
-          color: textColor,
-          fontWeight: FontWeight.w600,
-        ),
+        style: TextStyle(fontSize: 16, color: textColor, fontWeight: FontWeight.w600),
       ),
     );
   }
