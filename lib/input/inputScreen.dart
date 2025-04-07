@@ -12,6 +12,7 @@ class _InputScreenState extends State<InputScreen> {
   int _selectedIndex = 0;
   String? selectedGender;
   String? resultText;
+  bool _hasRisk = false;
 
   final TextEditingController genderController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
@@ -48,31 +49,29 @@ class _InputScreenState extends State<InputScreen> {
   }
 
   dynamic findClosest(List<dynamic> data, String gender, String field, double value) {
-  final filtered = data.where((item) => item['Gender'].toLowerCase() == gender.toLowerCase()).toList();
-  filtered.sort((a, b) {
-    final aVal = (a[field] as num).toDouble();
-    final bVal = (b[field] as num).toDouble();
-    return (aVal - value).abs().compareTo((bVal - value).abs());
-  });
-  return filtered.isNotEmpty ? filtered.first : null;
-}
-
+    final filtered = data.where((item) => item['Gender'].toLowerCase() == gender.toLowerCase()).toList();
+    filtered.sort((a, b) {
+      final aVal = (a[field] as num).toDouble();
+      final bVal = (b[field] as num).toDouble();
+      return (aVal - value).abs().compareTo((bVal - value).abs());
+    });
+    return filtered.isNotEmpty ? filtered.first : null;
+  }
 
   String interpretZScore(double z, String type) {
     switch (type) {
       case 'HAZ':
-        if (z < -2) return 'Stunted (Height-for-age < -2 SD)';
+        if (z < -2) return '📉 Stunted (Height-for-age < -2 SD)';
         break;
       case 'WHZ':
-        if (z < -2) return 'Wasted (Weight-for-height < -2 SD)';
-        if (z > 2) return 'Overweight (Weight-for-height > +2 SD)';
+        if (z < -2) return '📉 Wasted (Weight-for-height < -2 SD)';
+        if (z > 2) return '⚠️ Overweight (Weight-for-height > +2 SD)';
         break;
       case 'WAZ':
-        if (z < -2) return 'Underweight (Weight-for-age < -2 SD)';
+        if (z < -2) return '📉 Underweight (Weight-for-age < -2 SD)';
         break;
     }
-    return 'Normal';
-    // return 'Normal ($type)';
+    return '✅ Normal';
   }
 
   void _submitData() {
@@ -87,7 +86,7 @@ class _InputScreenState extends State<InputScreen> {
       final wazRow = findClosest(wazData, gender, "Month", age.toDouble());
 
       if (whzRow == null || hazRow == null || wazRow == null) {
-        setState(() => resultText = "Error: Could not find matching LMS data.");
+        setState(() => resultText = "❌ Error: Could not find matching LMS data.");
         return;
       }
 
@@ -110,19 +109,24 @@ class _InputScreenState extends State<InputScreen> {
         weight,
       );
 
+      String whzResult = interpretZScore(whz ?? 0, 'WHZ');
+      String hazResult = interpretZScore(haz ?? 0, 'HAZ');
+      String wazResult = interpretZScore(waz ?? 0, 'WAZ');
+      bool hasRisk = [whzResult, hazResult, wazResult].any((r) => !r.contains("Normal"));
 
       setState(() {
+        _hasRisk = hasRisk;
         resultText = """
-✅ Malnutrition Analysis Result:
+🔍 Malnutrition Analysis Result:
 • Gender: $gender
 • Age: $age months
 • Height: ${height}cm
 • Weight: ${weight}kg
 
 📊 Z-Scores:
-• WHZ (Weight-for-Height): ${whz?.toStringAsFixed(2)} ➝ ${interpretZScore(whz ?? 0, 'WHZ')}
-• HAZ (Height-for-Age): ${haz?.toStringAsFixed(2)} ➝ ${interpretZScore(haz ?? 0, 'HAZ')}
-• WAZ (Weight-for-Age): ${waz?.toStringAsFixed(2)} ➝ ${interpretZScore(waz ?? 0, 'WAZ')}
+• WHZ (Weight-for-Height): ${whz?.toStringAsFixed(2)} ➝ $whzResult
+• HAZ (Height-for-Age): ${haz?.toStringAsFixed(2)} ➝ $hazResult
+• WAZ (Weight-for-Age): ${waz?.toStringAsFixed(2)} ➝ $wazResult
 """;
       });
     } else {
@@ -131,9 +135,6 @@ class _InputScreenState extends State<InputScreen> {
       );
     }
   }
-
-  // UI remains same as your provided code (reused for brevity)
-  // Only change is _submitData() function and dataset loading
 
   @override
   void dispose() {
@@ -144,7 +145,6 @@ class _InputScreenState extends State<InputScreen> {
     super.dispose();
   }
 
-  // --- UI widgets (same as before) ---
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -267,16 +267,23 @@ class _InputScreenState extends State<InputScreen> {
   }
 
   Widget _buildResultCard(String result) {
+    final cardColor = _hasRisk ? Colors.red.shade100 : Colors.green.shade100;
+    final borderColor = _hasRisk ? Colors.red : Colors.green;
+    final textColor = _hasRisk ? Colors.red[900] : Colors.green[900];
+
     return Container(
       padding: EdgeInsets.all(16),
       margin: EdgeInsets.only(top: 16),
       decoration: BoxDecoration(
-        color: Colors.green.shade100,
+        color: cardColor,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.green),
-        boxShadow: [BoxShadow(color: Colors.green.shade200, blurRadius: 4, offset: Offset(0, 2))],
+        border: Border.all(color: borderColor),
+        boxShadow: [BoxShadow(color: borderColor.withOpacity(0.4), blurRadius: 4, offset: Offset(0, 2))],
       ),
-      child: Text(result, style: TextStyle(fontSize: 16, color: Colors.green[900], fontWeight: FontWeight.w600)),
+      child: Text(
+        result,
+        style: TextStyle(fontSize: 16, color: textColor, fontWeight: FontWeight.w600),
+      ),
     );
   }
 }
