@@ -6,6 +6,7 @@ import 'package:malnutridetect/graph/pricePoints.dart';
 import 'package:malnutridetect/graph/line_chart_screen.dart';
 import 'package:malnutridetect/chatbot/chatbotScreen.dart';
 import 'package:malnutridetect/input/inputScreen.dart';
+import 'package:malnutridetect/Profile/main_profile.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -42,7 +43,18 @@ class _HomePageState extends State<HomePage> {
           setState(() {
             _selectedIndex = index; // Update the selected index when tapped
           });
+
+          // Navigate to ProfilePage when the profile icon is tapped
+          if (index == 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProfilePage(),
+              ), // Navigate to MainProfile
+            );
+          }
         },
+
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.today), label: "DAILY"),
           BottomNavigationBarItem(icon: Icon(Icons.insights), label: "INSIGHT"),
@@ -136,15 +148,15 @@ class _HomePageState extends State<HomePage> {
                   );
                 },
               ),
-              SizedBox(height: 20),
-              MaterialButton(
-                onPressed: () {
-                  FirebaseAuth.instance.signOut();
-                },
-                color: Colors.blueAccent[200],
-                child: Text('Sign Out'),
-              ),
-              SizedBox(height: 20),
+              //SizedBox(height: 20),
+              // MaterialButton(
+              //   onPressed: () {
+              //     FirebaseAuth.instance.signOut();
+              //   },
+              //   color: Colors.blueAccent[200],
+              //   child: Text('Sign Out'),
+              // ),
+              // SizedBox(height: 20),
             ],
           ),
         ),
