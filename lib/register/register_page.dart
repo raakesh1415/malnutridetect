@@ -17,6 +17,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _usernameController = TextEditingController();
+  final _fullnameController = TextEditingController();
   // final _roleController = TextEditingController();
 
   Future signUp() async {
@@ -31,16 +32,18 @@ class _RegisterPageState extends State<RegisterPage> {
         _usernameController.text.trim(), 
         // _roleController.text.trim(), 
         _emailController.text.trim(), 
+        _fullnameController.text.trim()
       );
     }
   }
 
-  Future addUserDetails(String username, String email) async {
+  Future addUserDetails(String username, String email, String fullname) async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     await FirebaseFirestore.instance.collection('users').doc(uid).set({
       'username': username,
       // 'role': role,
       'email': email,
+      'fullname': fullname,
     });
   }
 
@@ -55,6 +58,7 @@ class _RegisterPageState extends State<RegisterPage> {
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     _usernameController.dispose();
+    _fullnameController.dispose();
     // _roleController.dispose();
     super.dispose();
   }
@@ -95,7 +99,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 SizedBox(height: 30),
-                
+
                 // username textfield
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -110,8 +114,31 @@ class _RegisterPageState extends State<RegisterPage> {
                         borderSide: BorderSide(color: Colors.blueAccent),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      prefixIcon: const Icon(Icons.person_outlined, color: Colors.blueAccent),
+                      prefixIcon: const Icon(Icons.person_outline_rounded, color: Colors.blueAccent),
                       hintText: 'Username',
+                      fillColor: Colors.grey[200],
+                      filled: true,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10),
+
+                // fullname textfield
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: TextField(
+                    controller: _fullnameController,
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueAccent),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      prefixIcon: const Icon(Icons.person_outline_rounded, color: Colors.blueAccent),
+                      hintText: 'Fullname',
                       fillColor: Colors.grey[200],
                       filled: true,
                     ),

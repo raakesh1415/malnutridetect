@@ -44,6 +44,7 @@ dependencies:
   screenshot: ^3.0.0
   printing: ^5.14.2
   pdf: ^3.6.0
+  http: ^0.13.6
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -70,6 +71,7 @@ flutter:
   # assets:
   assets:
     - images/
+    - datasets/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
