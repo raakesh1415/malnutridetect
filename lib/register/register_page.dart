@@ -23,16 +23,16 @@ class _RegisterPageState extends State<RegisterPage> {
   Future signUp() async {
     if (passwordConfirmed()) {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _emailController.text.trim(), 
+        email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
 
       // add user details
       addUserDetails(
-        _usernameController.text.trim(), 
-        // _roleController.text.trim(), 
-        _emailController.text.trim(), 
-        _fullnameController.text.trim()
+        _usernameController.text.trim(),
+        // _roleController.text.trim(),
+        _emailController.text.trim(),
+        _fullnameController.text.trim(),
       );
     }
   }
@@ -47,9 +47,9 @@ class _RegisterPageState extends State<RegisterPage> {
     });
   }
 
-
   bool passwordConfirmed() {
-    return _passwordController.text.trim() == _confirmPasswordController.text.trim();
+    return _passwordController.text.trim() ==
+        _confirmPasswordController.text.trim();
   }
 
   @override
@@ -62,7 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
     // _roleController.dispose();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,29 +75,19 @@ class _RegisterPageState extends State<RegisterPage> {
               children: [
                 // App Logo
                 // Icon(
-                //   Icons.android, 
+                //   Icons.android,
                 //   size: 100
                 // ),
                 Image.asset(
-                  'images/google.png', // Replace with app logo
+                  'images/Nutricare.png', // Replace with app logo
                   height: 100,
                 ),
                 SizedBox(height: 20),
-                
+
                 // Hello again!
-                Text(
-                  'M-Checker',
-                  style: GoogleFonts.bebasNeue(
-                    fontSize: 52,
-                  ),
-                ),
+                Text('NutriCare', style: GoogleFonts.bebasNeue(fontSize: 52)),
                 SizedBox(height: 10),
-                Text(
-                  'Register Below!',
-                  style: TextStyle(
-                    fontSize: 24
-                  ),
-                ),
+                Text('Register Below!', style: TextStyle(fontSize: 24)),
                 SizedBox(height: 30),
 
                 // username textfield
@@ -114,7 +104,10 @@ class _RegisterPageState extends State<RegisterPage> {
                         borderSide: BorderSide(color: Colors.blueAccent),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      prefixIcon: const Icon(Icons.person_outline_rounded, color: Colors.blueAccent),
+                      prefixIcon: const Icon(
+                        Icons.person_outline_rounded,
+                        color: Colors.blueAccent,
+                      ),
                       hintText: 'Username',
                       fillColor: Colors.grey[200],
                       filled: true,
@@ -137,7 +130,10 @@ class _RegisterPageState extends State<RegisterPage> {
                         borderSide: BorderSide(color: Colors.blueAccent),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      prefixIcon: const Icon(Icons.person_outline_rounded, color: Colors.blueAccent),
+                      prefixIcon: const Icon(
+                        Icons.person_outline_rounded,
+                        color: Colors.blueAccent,
+                      ),
                       hintText: 'Fullname',
                       fillColor: Colors.grey[200],
                       filled: true,
@@ -160,7 +156,10 @@ class _RegisterPageState extends State<RegisterPage> {
                         borderSide: BorderSide(color: Colors.blueAccent),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      prefixIcon: const Icon(Icons.email_outlined, color: Colors.blueAccent),
+                      prefixIcon: const Icon(
+                        Icons.email_outlined,
+                        color: Colors.blueAccent,
+                      ),
                       hintText: 'Email',
                       fillColor: Colors.grey[200],
                       filled: true,
@@ -168,7 +167,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 SizedBox(height: 10),
-            
+
                 // password textfield
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -184,7 +183,10 @@ class _RegisterPageState extends State<RegisterPage> {
                         borderSide: BorderSide(color: Colors.blueAccent),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      prefixIcon: const Icon(Icons.lock_outlined, color: Colors.blueAccent),
+                      prefixIcon: const Icon(
+                        Icons.lock_outlined,
+                        color: Colors.blueAccent,
+                      ),
                       hintText: 'Password',
                       fillColor: Colors.grey[200],
                       filled: true,
@@ -208,7 +210,10 @@ class _RegisterPageState extends State<RegisterPage> {
                         borderSide: BorderSide(color: Colors.blueAccent),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      prefixIcon: const Icon(Icons.lock_outlined, color: Colors.blueAccent),
+                      prefixIcon: const Icon(
+                        Icons.lock_outlined,
+                        color: Colors.blueAccent,
+                      ),
                       hintText: 'Confirm Password',
                       fillColor: Colors.grey[200],
                       filled: true,
@@ -280,15 +285,14 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 SizedBox(height: 25),
-            
+
                 // not a member? register now
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Already have account!',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+                    Text(
+                      'Already have account!',
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     GestureDetector(
                       onTap: widget.showLoginPage,
@@ -301,8 +305,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                   ],
-                )
-            
+                ),
               ],
             ),
           ),

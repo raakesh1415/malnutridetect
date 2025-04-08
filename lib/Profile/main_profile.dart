@@ -38,9 +38,7 @@ class ProfilePage extends StatelessWidget {
               try {
                 await FirebaseAuth.instance.signOut(); // ✅ await is required
                 Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                    builder: (context) => MainPage(),
-                  ),
+                  MaterialPageRoute(builder: (context) => MainPage()),
                   (route) => false,
                 );
               } catch (e) {
@@ -95,14 +93,20 @@ class ProfilePage extends StatelessWidget {
               icon: Icons.person,
             ),
             _buildTextField(
-              labelText: 'Email',
-              initialValue: 'damon90@gmail.com',
-              icon: Icons.email,
+              labelText: 'Username', // Changed from Email to Username
+              initialValue: 'damon90', // Changed initial value
+              icon: Icons.person_outline, // Changed icon
             ),
             _buildTextField(
-              labelText: 'Password',
-              initialValue: '********',
-              icon: Icons.lock,
+              labelText: 'Email', // Changed from Password to Email
+              initialValue:
+                  'damon90@gmail.com', // Changed initial value - NO ASTERISKS
+              icon: Icons.email, // Changed icon
+            ),
+            _buildTextField(
+              labelText: 'Password', // Changed from Location to Password
+              initialValue: '********', // Changed initial value
+              icon: Icons.lock, // Changed icon
               obscureText: true,
               suffixIcon: IconButton(
                 icon: Icon(Icons.visibility),
@@ -110,11 +114,6 @@ class ProfilePage extends StatelessWidget {
                   // Toggle password visibility
                 },
               ),
-            ),
-            _buildTextField(
-              labelText: 'Location',
-              initialValue: 'New York',
-              icon: Icons.location_on,
             ),
             SizedBox(height: 40),
 

@@ -65,14 +65,14 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 // App Logo
                 Image.asset(
-                  'images/google.png', // Replace with app logo
+                  'images/Nutricare.png', // Replace with app logo
                   height: 100,
                 ),
                 SizedBox(height: 50),
                 
                 // Hello again!
                 Text(
-                  'M-Checker',  // Replace app name
+                  'NutriCare',  // Replace app name
                   style: GoogleFonts.bebasNeue(
                     fontSize: 52,
                   ),
