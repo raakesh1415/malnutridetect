@@ -37,8 +37,8 @@ class _ProfilePageState extends State<ProfilePage> {
         if (userDoc.exists) {
           Map<String, dynamic>? data = userDoc.data() as Map<String, dynamic>?;
           if (data != null) {
-            // print("Retrieved data: $data");
-            _fullName = data['fullName'] ?? ''; // Corrected field name
+            print("Retrieved data: $data");
+            _fullName = data['fullname'] ?? ''; // Corrected field name
             _username = data['username'] ?? '';
             _email = user.email!;
 
