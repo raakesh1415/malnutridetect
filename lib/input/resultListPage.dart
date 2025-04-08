@@ -82,6 +82,7 @@ class _ResultListPageState extends State<ResultListPage> {
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     padding: EdgeInsets.all(16),
+                    width: double.infinity, // Fixed width
                     decoration: BoxDecoration(
                       color:
                           result.contains("📉") || result.contains("⚠️")
@@ -117,12 +118,17 @@ class _ResultListPageState extends State<ResultListPage> {
                       ),
                     ),
                   ),
-
                   Positioned(
-                    top: 8,
+                    top: 12,
                     right: 16,
                     child: IconButton(
-                      icon: Icon(Icons.close, color: Colors.red),
+                      icon: Icon(
+                        Icons.close,
+                        color:
+                            result.contains("📉") || result.contains("⚠️")
+                                ? Colors.red[900]
+                                : Colors.green[900],
+                      ),
                       onPressed: () => _confirmDelete(context, docId),
                       tooltip: 'Delete Record',
                     ),

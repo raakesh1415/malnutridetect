@@ -137,7 +137,18 @@ class _LineChartScreenState extends State<LineChartScreen> {
         backgroundColor: Colors.white,
         titlesData: FlTitlesData(
           leftTitles: AxisTitles(
-            sideTitles: SideTitles(showTitles: true, reservedSize: 40),
+            sideTitles: SideTitles(
+              showTitles: true,
+              reservedSize: 40,
+              getTitlesWidget: (value, meta) {
+                return Text(
+                  meta.formattedValue,
+                  style: const TextStyle(
+                    fontSize: 10, // Adjust this value to your desired font size
+                  ),
+                );
+              },
+            ),
           ),
           rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
           topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),

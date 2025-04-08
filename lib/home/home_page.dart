@@ -126,6 +126,18 @@ class _HomePageState extends State<HomePage> {
                   );
                 },
               ),
+              _buildHealthCard(
+                index: 1,
+                icon: Icons.folder_outlined,
+                title: "Malnutrition Records",
+                subtitle: "View malnutrition anaylsis results.",
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ResultListPage()),
+                  );
+                },
+              ),
               SizedBox(height: 30),
               Text(
                 "AI Assistance",
@@ -136,15 +148,15 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               SizedBox(height: 10),
-              _buildHealthCard(
-                index: 2,
-                icon: Icons.restaurant_menu,
-                title: "Nutrition Plan",
-                subtitle: "Get personalized nutrition advice.",
-                onTap: () {
-                  _handleCardAction("Nutrition Plan", 2);
-                },
-              ),
+              // _buildHealthCard(
+              //   index: 2,
+              //   icon: Icons.restaurant_menu,
+              //   title: "Nutrition Plan",
+              //   subtitle: "Get personalized nutrition advice.",
+              //   onTap: () {
+              //     _handleCardAction("Nutrition Plan", 2);
+              //   },
+              // ),
               _buildHealthCard(
                 index: 3,
                 icon: Icons.chat,

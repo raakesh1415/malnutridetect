@@ -57,11 +57,12 @@ class _InputScreenState extends State<InputScreen> {
     String field,
     double value,
   ) {
-    final filtered = data
-        .where(
-          (item) => item['Gender'].toLowerCase() == gender.toLowerCase(),
-        )
-        .toList();
+    final filtered =
+        data
+            .where(
+              (item) => item['Gender'].toLowerCase() == gender.toLowerCase(),
+            )
+            .toList();
     filtered.sort((a, b) {
       final aVal = (a[field] as num).toDouble();
       final bVal = (b[field] as num).toDouble();
@@ -135,40 +136,48 @@ class _InputScreenState extends State<InputScreen> {
       DateTime timestamp = DateTime.now();
       _hasRisk = hasRisk;
       String formattedResult = """
-  🔍 Malnutrition Analysis Result:
+🔍 MALNUTRITION ANALYSIS RESULT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+👤 Personal Information:
   • Gender: $gender
   • Age: $age months
-  • Height: ${height}cm
-  • Weight: ${weight}kg
+  • Height: ${height.toStringAsFixed(1)} cm
+  • Weight: ${weight.toStringAsFixed(1)} kg
 
-  📊 Z-Scores:
-  • WHZ (Weight-for-Height): ${whz?.toStringAsFixed(2)} ➝ $whzResult
-  • HAZ (Height-for-Age): ${haz?.toStringAsFixed(2)} ➝ $hazResult
-  • WAZ (Weight-for-Age): ${waz?.toStringAsFixed(2)} ➝ $wazResult
+📊 Results:
+  • Weight-for-Height (WHZ): ${whz?.toStringAsFixed(2) ?? 'N/A'} 
+    ${whzResult}
+  • Height-for-Age (HAZ): ${haz?.toStringAsFixed(2) ?? 'N/A'} 
+    ${hazResult}
+  • Weight-for-Age (WAZ): ${waz?.toStringAsFixed(2) ?? 'N/A'} 
+    ${wazResult}
 
-  🕒 Checked on: ${timestamp.toLocal().toString().substring(0, 16)}
-  """;
+📝 SUMMARY: ${hasRisk ? '⚠️ MALNUTRITION RISK' : '✅ NORMAL STATUS'}
+
+🕒 Assessment Date: ${timestamp.toLocal().toString().substring(0, 16)}
+""";
 
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        await FirebaseFirestore.instance
-            .collection('malnutrition_records')
-            .add({
-              'userId': user.uid,
-              'gender': gender,
-              'age': age,
-              'height': height,
-              'weight': weight,
-              'timestamp': timestamp.toIso8601String(),
-              'result': formattedResult,
-              'whz': whz, // 🔄 Added WHZ value
-              'haz': haz, // 🔄 Added HAZ value
-              'waz': waz, // 🔄 Added WAZ value
-              'whz_status': whzResult,
-              'haz_status': hazResult,
-              'waz_status': wazResult,
-              'hasRisk': hasRisk,
-            });
+        await FirebaseFirestore.instance.collection('malnutrition_records').add(
+          {
+            'userId': user.uid,
+            'gender': gender,
+            'age': age,
+            'height': height,
+            'weight': weight,
+            'timestamp': timestamp.toIso8601String(),
+            'result': formattedResult,
+            'whz': whz, // 🔄 Added WHZ value
+            'haz': haz, // 🔄 Added HAZ value
+            'waz': waz, // 🔄 Added WAZ value
+            'whz_status': whzResult,
+            'haz_status': hazResult,
+            'waz_status': wazResult,
+            'hasRisk': hasRisk,
+          },
+        );
 
         Navigator.push(
           context,
