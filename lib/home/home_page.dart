@@ -158,6 +158,7 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
               //SizedBox(height: 20),
+              // Text('Signed In as: ${user.email!}'), 
               // MaterialButton(
               //   onPressed: () {
               //     FirebaseAuth.instance.signOut();
