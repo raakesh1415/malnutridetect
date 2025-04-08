@@ -217,10 +217,11 @@ class _InputScreenState extends State<InputScreen> {
         child: ListView(
           children: [
             _buildSectionTitle("👤 Gender"),
+            SizedBox(height: 10),
             Row(
               children: [
                 _genderRadio("Male", Icons.male),
-                SizedBox(width: 20),
+                SizedBox(width: 10),
                 _genderRadio("Female", Icons.female),
               ],
             ),
@@ -297,7 +298,7 @@ class _InputScreenState extends State<InputScreen> {
   Widget _genderRadio(String gender, IconData icon) {
     return Expanded(
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 8),
+        padding: EdgeInsets.symmetric(horizontal: 5),
         decoration: BoxDecoration(
           color: selectedGender == gender ? Colors.blue[200] : Colors.white,
           borderRadius: BorderRadius.circular(10),
@@ -309,7 +310,7 @@ class _InputScreenState extends State<InputScreen> {
           title: Row(
             children: [
               Icon(icon, color: Colors.blue),
-              SizedBox(width: 8),
+              SizedBox(width: 5),
               Text(gender),
             ],
           ),
