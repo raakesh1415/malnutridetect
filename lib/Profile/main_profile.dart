@@ -1,10 +1,85 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:malnutridetect/auth/main_page.dart';
-import 'package:malnutridetect/register/login_page.dart';
-import 'package:malnutridetect/register/register_page.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  String _fullName = '';
+  String _username = '';
+  String _email = '';
+
+  final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+    _emailController.text = _email; // Initialize email controller
+  }
+
+  Future<void> _loadUserData() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      try {
+        DocumentSnapshot userDoc =
+            await _firestore.collection('users').doc(user.uid).get();
+
+        if (userDoc.exists) {
+          Map<String, dynamic>? data = userDoc.data() as Map<String, dynamic>?;
+          if (data != null) {
+            // print("Retrieved data: $data");
+            _fullName = data['fullName'] ?? ''; // Corrected field name
+            _username = data['username'] ?? '';
+            _email = user.email!;
+
+            _fullNameController.text = _fullName;
+            _usernameController.text = _username;
+            _emailController.text = _email;
+
+            setState(() {
+              // <-- Ensure setState is called *after* controllers are updated
+              // This will trigger a rebuild with the loaded data
+            });
+          }
+        }
+      } catch (e) {
+        print('Error fetching user data: $e');
+      }
+    }
+  }
+
+  Future<void> _saveUserData() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      try {
+        // Update Firestore data
+        await _firestore.collection('users').doc(user.uid).update({
+          'fullName': _fullNameController.text, // Use controller value
+          'username': _usernameController.text, // Use controller value
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Profile updated successfully!')),
+        );
+      } catch (e) {
+        print('Error saving user data: $e');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error updating profile. Please try again.')),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,9 +89,7 @@ class ProfilePage extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.blue[700]),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           'Profile',
@@ -27,18 +100,17 @@ class ProfilePage extends StatelessWidget {
         ),
         actions: [
           TextButton.icon(
-            // Use TextButton.icon for a text + icon button
             style: TextButton.styleFrom(
               backgroundColor: Colors.blue,
               foregroundColor: Colors.white,
             ),
-            icon: Icon(Icons.logout), // Use a logout icon
+            icon: Icon(Icons.logout),
             label: Text('Sign Out'),
             onPressed: () async {
               try {
-                await FirebaseAuth.instance.signOut(); // ✅ await is required
+                await _auth.signOut();
                 Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => MainPage()),
+                  MaterialPageRoute(builder: (_) => MainPage()),
                   (route) => false,
                 );
               } catch (e) {
@@ -66,7 +138,7 @@ class ProfilePage extends StatelessWidget {
                   CircleAvatar(
                     radius: 60,
                     backgroundImage: NetworkImage(
-                      'https://via.placeholder.com/150',
+                      'https://static.vecteezy.com/system/resources/previews/019/879/198/non_2x/user-icon-on-transparent-background-free-png.png',
                     ),
                   ),
                   Container(
@@ -89,43 +161,32 @@ class ProfilePage extends StatelessWidget {
             // Form Fields
             _buildTextField(
               labelText: 'Full Name',
-              initialValue: 'Demon',
+              controller: _fullNameController, // Pass the controller
               icon: Icons.person,
+              onChanged: (value) => _fullName = value,
             ),
             _buildTextField(
-              labelText: 'Username', // Changed from Email to Username
-              initialValue: 'damon90', // Changed initial value
-              icon: Icons.person_outline, // Changed icon
+              labelText: 'Username',
+              controller: _usernameController, // Pass the controller
+              icon: Icons.person_outline,
+              onChanged: (value) => _username = value,
             ),
             _buildTextField(
-              labelText: 'Email', // Changed from Password to Email
-              initialValue:
-                  'damon90@gmail.com', // Changed initial value - NO ASTERISKS
-              icon: Icons.email, // Changed icon
+              labelText: 'Email',
+              controller: _emailController, // Pass the controller
+              icon: Icons.email,
+              enabled: false,
             ),
-            _buildTextField(
-              labelText: 'Password', // Changed from Location to Password
-              initialValue: '********', // Changed initial value
-              icon: Icons.lock, // Changed icon
-              obscureText: true,
-              suffixIcon: IconButton(
-                icon: Icon(Icons.visibility),
-                onPressed: () {
-                  // Toggle password visibility
-                },
-              ),
-            ),
+
             SizedBox(height: 40),
 
-            // Action Buttons
+            // Buttons
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {
-                      // Handle cancel action
-                    },
+                    onPressed: () => Navigator.pop(context),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.grey[200],
                       foregroundColor: Colors.blue[700],
@@ -140,9 +201,7 @@ class ProfilePage extends StatelessWidget {
                 SizedBox(width: 15),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {
-                      // Handle save action
-                    },
+                    onPressed: _saveUserData,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
                       foregroundColor: Colors.white,
@@ -164,10 +223,12 @@ class ProfilePage extends StatelessWidget {
 
   Widget _buildTextField({
     required String labelText,
-    required String initialValue,
+    required TextEditingController controller,
     required IconData icon,
     bool obscureText = false,
     Widget? suffixIcon,
+    ValueChanged<String>? onChanged,
+    bool enabled = true,
   }) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
@@ -176,7 +237,7 @@ class ProfilePage extends StatelessWidget {
         borderRadius: BorderRadius.circular(30),
       ),
       child: TextFormField(
-        initialValue: initialValue,
+        controller: controller,
         obscureText: obscureText,
         decoration: InputDecoration(
           labelText: labelText,
@@ -185,6 +246,19 @@ class ProfilePage extends StatelessWidget {
           border: InputBorder.none,
           contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
         ),
+        onChanged: (value) {
+          if (onChanged != null) {
+            onChanged(value);
+          }
+          if (labelText == 'Full Name') {
+            _fullName = value;
+            _fullNameController.text = value; // <--- ADD THIS LINE
+          } else if (labelText == 'Username') {
+            _username = value;
+            _usernameController.text = value; // <--- ADD THIS LINE
+          }
+        },
+        enabled: enabled,
       ),
     );
   }
