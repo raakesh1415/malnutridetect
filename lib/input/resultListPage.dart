@@ -85,19 +85,19 @@ class _ResultListPageState extends State<ResultListPage> {
                     width: double.infinity, // Fixed width
                     decoration: BoxDecoration(
                       color:
-                          result.contains("📉") || result.contains("⚠️")
+                          result.contains("📉") || result.contains("⚠")
                               ? Colors.red.shade100
                               : Colors.green.shade100,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
                         color:
-                            result.contains("📉") || result.contains("⚠️")
+                            result.contains("📉") || result.contains("⚠")
                                 ? Colors.red
                                 : Colors.green,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: (result.contains("📉") || result.contains("⚠️")
+                          color: (result.contains("📉") || result.contains("⚠")
                                   ? Colors.red
                                   : Colors.green)
                               .withOpacity(0.4),
@@ -111,7 +111,7 @@ class _ResultListPageState extends State<ResultListPage> {
                       style: TextStyle(
                         fontSize: 16,
                         color:
-                            result.contains("📉") || result.contains("⚠️")
+                            result.contains("📉") || result.contains("⚠")
                                 ? Colors.red[900]
                                 : Colors.green[900],
                         fontWeight: FontWeight.w600,
@@ -125,7 +125,7 @@ class _ResultListPageState extends State<ResultListPage> {
                       icon: Icon(
                         Icons.close,
                         color:
-                            result.contains("📉") || result.contains("⚠️")
+                            result.contains("📉") || result.contains("⚠")
                                 ? Colors.red[900]
                                 : Colors.green[900],
                       ),

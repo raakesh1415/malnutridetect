@@ -7,6 +7,7 @@ import 'package:malnutridetect/graph/line_chart_screen.dart';
 import 'package:malnutridetect/chatbot/chatbotScreen.dart';
 import 'package:malnutridetect/input/inputScreen.dart';
 import 'package:malnutridetect/Profile/main_profile.dart';
+import 'package:malnutridetect/input/insights.dart';
 import 'package:malnutridetect/input/resultListPage.dart';
 
 class HomePage extends StatefulWidget {
@@ -49,7 +50,7 @@ class _HomePageState extends State<HomePage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ResultListPage(),
+                builder: (context) => Insights(),
               ), // Navigate to MainProfile
             );
           }
@@ -170,7 +171,7 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
               //SizedBox(height: 20),
-              // Text('Signed In as: ${user.email!}'), 
+              // Text('Signed In as: ${user.email!}'),
               // MaterialButton(
               //   onPressed: () {
               //     FirebaseAuth.instance.signOut();
