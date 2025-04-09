@@ -18,7 +18,7 @@ Whether you're a parent, caregiver, or healthcare worker, NutriCare empowers you
 
 ## 🎯 Key Features
 
-### ✅ AI-Powered Malnutrition Detection
+### ✅ Children Malnutrition Detection
 - Uses **WHO child growth standards** to assess risk.
 - Flags undernutrition indicators like **Underweight**, **Stunted Growth**, and **Wasting**.
 
