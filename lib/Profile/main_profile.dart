@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:malnutridetect/auth/main_page.dart';
+import 'package:malnutridetect/home/home_page.dart';
+import 'package:malnutridetect/input/insights.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -9,6 +11,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  int _selectedIndex = 0;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -83,53 +86,54 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.blue[700]),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text(
-          'Profile',
-          style: TextStyle(
-            color: Colors.blue[900],
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        actions: [
-          TextButton.icon(
-            style: TextButton.styleFrom(
-              backgroundColor: Colors.blue,
-              foregroundColor: Colors.white,
-            ),
-            icon: Icon(Icons.logout),
-            label: Text('Sign Out'),
-            onPressed: () async {
-              try {
-                await _auth.signOut();
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (_) => MainPage()),
-                  (route) => false,
-                );
-              } catch (e) {
-                print('Error signing out: $e');
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Error signing out. Please try again.'),
-                  ),
-                );
-              }
-            },
-          ),
-        ],
-      ),
+      backgroundColor: Colors.grey[200],
       body: SingleChildScrollView(
         padding: EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            SizedBox(height: 30),
+            // Header (previously AppBar)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Profile',
+                  style: TextStyle(
+                    color: Colors.blue[900],
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                TextButton.icon(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                  ),
+                  icon: Icon(Icons.logout),
+                  label: Text('Sign Out'),
+                  onPressed: () async {
+                    try {
+                      await _auth.signOut();
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (_) => MainPage()),
+                        (route) => false,
+                      );
+                    } catch (e) {
+                      print('Error signing out: $e');
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Error signing out. Please try again.'),
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
+
+            SizedBox(height: 20),
+
             // Profile Picture
             Center(
               child: Stack(
@@ -156,24 +160,25 @@ class _ProfilePageState extends State<ProfilePage> {
                 ],
               ),
             ),
+
             SizedBox(height: 30),
 
             // Form Fields
             _buildTextField(
               labelText: 'Full Name',
-              controller: _fullNameController, // Pass the controller
+              controller: _fullNameController,
               icon: Icons.person,
               onChanged: (value) => _fullName = value,
             ),
             _buildTextField(
               labelText: 'Username',
-              controller: _usernameController, // Pass the controller
+              controller: _usernameController,
               icon: Icons.person_outline,
               onChanged: (value) => _username = value,
             ),
             _buildTextField(
               labelText: 'Email',
-              controller: _emailController, // Pass the controller
+              controller: _emailController,
               icon: Icons.email,
               enabled: false,
             ),
@@ -217,6 +222,33 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.blue[400],
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white70,
+        currentIndex: _selectedIndex,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+          if (index == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Insights()),
+            );
+          } else if (index == 0) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
+          }
+        },
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.today), label: "DAILY"),
+          BottomNavigationBarItem(icon: Icon(Icons.insights), label: "INSIGHT"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "PROFILE"),
+        ],
       ),
     );
   }

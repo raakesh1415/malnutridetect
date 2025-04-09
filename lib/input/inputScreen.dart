@@ -12,7 +12,6 @@ class InputScreen extends StatefulWidget {
 }
 
 class _InputScreenState extends State<InputScreen> {
-  int _selectedIndex = 0;
   String? selectedGender;
   String? resultText;
   bool _hasRisk = false;
@@ -279,18 +278,6 @@ class _InputScreenState extends State<InputScreen> {
             if (resultText != null) _buildResultCard(resultText!),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.blue[400],
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white70,
-        currentIndex: _selectedIndex,
-        onTap: (index) => setState(() => _selectedIndex = index),
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.today), label: "DAILY"),
-          BottomNavigationBarItem(icon: Icon(Icons.insights), label: "INSIGHT"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "PROFILE"),
-        ],
       ),
     );
   }

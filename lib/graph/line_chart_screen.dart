@@ -17,7 +17,6 @@ class LineChartScreen extends StatefulWidget {
 
 class _LineChartScreenState extends State<LineChartScreen> {
   final ScreenshotController screenshotController = ScreenshotController();
-  int _selectedIndex = 0;
 
   List<FlSpot> wazSpots = [];
   List<FlSpot> hazSpots = [];
@@ -283,33 +282,6 @@ class _LineChartScreenState extends State<LineChartScreen> {
                   ),
                 ),
               ),
-
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.blue[400], // Ensure a dark enough background
-        selectedItemColor:
-            Colors.white, // White for the selected item (high contrast)
-        unselectedItemColor: Colors.white70, // Light white for unselected items
-        currentIndex: _selectedIndex, // Track selected index
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.today),
-            label: "DAILY", // Ensure label is readable against background
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.insights),
-            label: "INSIGHT", // Ensure label is readable against background
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: "PROFILE", // Ensure label is readable against background
-          ),
-        ],
-      ),
     );
   }
 }

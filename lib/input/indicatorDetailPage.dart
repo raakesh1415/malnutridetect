@@ -1,59 +1,62 @@
+//indicatorDetailPage.dart
 import 'package:flutter/material.dart';
 
 class IndicatorDetailPage extends StatelessWidget {
   final String title;
   final String content;
 
-  const IndicatorDetailPage({required this.title, required this.content});
+  const IndicatorDetailPage({
+    Key? key,
+    required this.title,
+    required this.content,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Widget? specialContent;
+
+    // Add special content for specific sections
+    if (title == 'Malnutrition indicators') {
+      specialContent = _buildDefinitionTable();
+    } else if (title == 'Cut-off values for public health significance') {
+      specialContent = Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildCutoffTable('Stunting', [
+            ['Very low', '< 2.5%'],
+            ['Low', '2.5 - < 10%'],
+            ['Medium', '10 - < 20%'],
+            ['High', '20 - < 30%'],
+            ['Very high', '≥ 30%'],
+          ]),
+          SizedBox(height: 16),
+          _buildCutoffTable('Wasting', [
+            ['Very low', '< 2.5%'],
+            ['Low', '2.5 - < 5%'],
+            ['Medium', '5 - < 10%'],
+            ['High', '10 - < 15%'],
+            ['Very high', '≥ 15%'],
+          ]),
+        ],
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
-        backgroundColor: Colors.blue[700],
-        centerTitle: true,
+        backgroundColor: Colors.blue[400],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (title == 'What do these indicators tell us?') ...[
-                _buildDescriptionText(content),
-              ],
-              if (title == 'What are the consequences and implications?') ...[
-                _buildFormattedText(content),
-              ],
-              if (title == 'How are these indicators defined?') ...[
-                _buildDefinitionTable(),
-              ],
-              if (title == 'Cut-off values for public health significance') ...[
-                _buildCutoffTable('Stunting', [
-                  ['Very Low', '<2.5%'],
-                  ['Low', '2.5% to <10%'],
-                  ['Medium', '10% to <20%'],
-                  ['High', '20% to <30%'],
-                  ['Very High', '≥30%'],
-                ]),
-                SizedBox(height: 20),
-                _buildCutoffTable('Wasting', [
-                  ['Very Low', '<2.5%'],
-                  ['Low', '2.5% to <5%'],
-                  ['Medium', '5% to <10%'],
-                  ['High', '10% to <15%'],
-                  ['Very High', '≥15%'],
-                ]),
-                SizedBox(height: 20),
-                _buildCutoffTable('Overweight', [
-                  ['Very Low', '<2.5%'],
-                  ['Low', '2.5% to <5%'],
-                  ['Medium', '5% to <10%'],
-                  ['High', '10% to <15%'],
-                  ['Very High', '≥15%'],
-                ]),
-              ],
+              // Display formatted content with markdown-style bold text
+              _buildFormattedText(content),
+              SizedBox(height: 24),
+              // Display special content if available
+              if (specialContent != null) specialContent,
             ],
           ),
         ),
@@ -61,56 +64,120 @@ class IndicatorDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildDescriptionText(String content) {
-    return Text(
-      content,
-      style: TextStyle(fontSize: 16, height: 1.5, color: Colors.black87),
+  // Method to handle markdown-style formatting
+  Widget _buildFormattedText(String text) {
+    // Split the content by line breaks to handle bullets separately
+    List<String> lines = text.split('\n');
+    List<Widget> textWidgets = [];
+
+    for (String line in lines) {
+      // Check if the line is a bullet point
+      if (line.trim().startsWith('- ')) {
+        textWidgets.add(
+          Padding(
+            padding: const EdgeInsets.only(left: 16.0, bottom: 4.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('• ', style: TextStyle(fontSize: 16)),
+                Expanded(
+                  child: _buildRichText(line.trim().substring(2)),
+                ),
+              ],
+            ),
+          ),
+        );
+      } else {
+        // Handle regular text with potential bold sections
+        textWidgets.add(_buildRichText(line));
+      }
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: textWidgets,
     );
   }
 
-  Widget _buildFormattedText(String content) {
-    return RichText(
-      text: TextSpan(
-        style: TextStyle(fontSize: 16, color: Colors.black87),
-        children: [
+  // Helper method to process markdown-style bold text (**bold**)
+  Widget _buildRichText(String text) {
+    List<TextSpan> spans = [];
+    
+    // Pattern to match **bold text**
+    RegExp boldPattern = RegExp(r'\*\*(.*?)\*\*');
+    
+    // Start position for scanning the text
+    int currentPosition = 0;
+    
+    // Find all bold patterns in the text
+    for (Match match in boldPattern.allMatches(text)) {
+      // Add any text before the bold pattern
+      if (match.start > currentPosition) {
+        spans.add(TextSpan(
+          text: text.substring(currentPosition, match.start),
+          style: TextStyle(fontSize: 16),
+        ));
+      }
+      
+      // Add the bold text without the ** markers
+      spans.add(TextSpan(
+        text: match.group(1), // The text inside ** markers
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+      ));
+      
+      // Update the current position
+      currentPosition = match.end;
+    }
+    
+    // Add any remaining text after the last bold pattern
+    if (currentPosition < text.length) {
+      spans.add(TextSpan(
+        text: text.substring(currentPosition),
+        style: TextStyle(fontSize: 16),
+      ));
+    }
+    
+    // If no bold patterns were found, check if this is an indicator line
+    // (specific to the Malnutrition indicators section)
+    if (spans.isEmpty && text.contains(':')) {
+      List<String> parts = text.split(':');
+      if (parts.length == 2) {
+        spans = [
           TextSpan(
-            text: 'Stunting\n',
-            style: TextStyle(fontWeight: FontWeight.bold),
+            text: parts[0].trim() + ': ',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
           TextSpan(
-            text:
-                'Children who suffer from growth retardation due to poor diets or infections are at higher risk of illness and death. It leads to delayed mental development, poor school performance, reduced intellectual capacity, and future economic challenges.\n\n',
+            text: parts[1].trim(),
+            style: TextStyle(fontSize: 16),
           ),
-          TextSpan(
-            text: 'Wasting\n',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          TextSpan(
-            text:
-                'A sign of acute undernutrition, usually due to insufficient food intake or frequent infections like diarrhea. It weakens the immune system, increasing the severity and risk of diseases and death.\n\n',
-          ),
-          TextSpan(
-            text: 'Overweight\n',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          TextSpan(
-            text:
-                'Linked with a greater chance of obesity in adulthood, leading to serious health issues such as: Cardiovascular diseases, diabetes, musculoskeletal disorders, cancers (endometrium, breast, colon).\n\n',
-          ),
-          TextSpan(
-            text: 'Underweight\n',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          TextSpan(
-            text:
-                'Easy to measure but concerning. Even mild underweight raises mortality risk in children, with higher risk in severely underweight cases.\n\n',
-          ),
-        ],
+        ];
+      } else {
+        spans = [TextSpan(text: text, style: TextStyle(fontSize: 16))];
+      }
+    }
+    
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: RichText(
+        text: TextSpan(
+          style: TextStyle(color: Colors.black, fontSize: 16),
+          children: spans.isEmpty ? [TextSpan(text: text, style: TextStyle(fontSize: 16))] : spans,
+        ),
       ),
     );
   }
 
-  Widget _buildDefinitionTable() {
+  TableRow _buildTableRow(String col1, String col2) {
+    return TableRow(
+      children: [
+        Padding(padding: EdgeInsets.all(8), child: Text(col1)),
+        Padding(padding: EdgeInsets.all(8), child: Text(col2)),
+      ],
+    );
+  }
+
+  Table _buildDefinitionTable() {
     return Table(
       border: TableBorder.all(width: 1, color: Colors.grey.shade400),
       columnWidths: {0: FlexColumnWidth(2), 1: FlexColumnWidth(5)},
@@ -154,34 +221,25 @@ class IndicatorDetailPage extends StatelessWidget {
     );
   }
 
-  TableRow _buildTableRow(String col1, String col2) {
-    return TableRow(
-      children: [
-        Padding(padding: EdgeInsets.all(8), child: Text(col1)),
-        Padding(padding: EdgeInsets.all(8), child: Text(col2)),
-      ],
-    );
-  }
-
-  Widget _buildCutoffTable(String indicator, List<List<String>> rows) {
+  Table _buildCutoffTable(String indicator, List<List<String>> rows) {
     return Table(
       border: TableBorder.all(width: 1, color: Colors.grey.shade400),
       columnWidths: {0: FlexColumnWidth(2), 1: FlexColumnWidth(3)},
       children: [
         TableRow(
-          decoration: BoxDecoration(color: Colors.blue.shade100),
+          decoration: BoxDecoration(color: Colors.green.shade100),
           children: [
             Padding(
               padding: EdgeInsets.all(8),
               child: Text(
-                "Indicator",
+                "$indicator Prevalence",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
             Padding(
               padding: EdgeInsets.all(8),
               child: Text(
-                "Prevalence Cut-off",
+                "Cut-off Values",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
