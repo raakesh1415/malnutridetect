@@ -52,7 +52,7 @@ Whether you're a parent, caregiver, or healthcare worker, NutriCare empowers you
 NutriCare contributes to the following **UN Sustainable Development Goals (SDGs)**:
 
 - **SDG 3: Good Health and Well-being** – By promoting better child health outcomes via monitoring and education.
-- - **SDG 9: Industry, Innovation and Infrastructure** – By leveraging innovative mobile health technology to address malnutrition and improve healthcare accessibility.
+- **SDG 9: Industry, Innovation and Infrastructure** – By leveraging innovative mobile health technology to address malnutrition and improve healthcare accessibility.
 
 ---
 
