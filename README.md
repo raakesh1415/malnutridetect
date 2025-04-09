@@ -68,24 +68,8 @@ NutriCare contributes to the following **UN Sustainable Development Goals (SDGs)
 
 ## 📷 Screenshots
 
-### 🧒 Login Interface
-![Growth Graph](assets/photo_2025-04-09_21-04-10.jpg)
+<div align="center"> <!-- Row 1 (4 images side-by-side) --> <img src="assets/photo_2025-04-09_21-04-10.jpg" alt="Login Interface" width="23%" style="margin: 5px;"/> <img src="assets/photo_2025-04-09_21-04-07.jpg" alt="Dashboard" width="23%" style="margin: 5px;"/> <img src="assets/photo_2025-04-09_21-03-55.jpg" alt="Malnutrition Input" width="23%" style="margin: 5px;"/> <img src="assets/photo_2025-04-09_21-04-01.jpg" alt="Insights" width="23%" style="margin: 5px;"/>
 
-### 🧒 Dashboard Interface
-![Growth Graph](assets/photo_2025-04-09_21-04-07.jpg)
-
-### 🧒 Malnutrition Input Interface
-![Growth Graph](assets/photo_2025-04-09_21-03-55.jpg)
-
-### 🤖 Malnutrition Insights 
-![Chatbot Feature](assets/photo_2025-04-09_21-04-01.jpg)
-
-### 🤖 Chatbot Interface
-![Chatbot Feature](assets/photo_2025-04-09_21-04-05.jpg)
-
-### 🧒 Child Growth Graphs
-![Growth Graph](assets/photo_2025-04-09_21-04-03.jpg)
-
-### 🧒 Profile Interface
-![Growth Graph](assets/photo_2025-04-09_21-03-58.jpg)
+<br/><br/>
+<!-- Row 2 (3 images side-by-side) --> <img src="assets/photo_2025-04-09_21-04-05.jpg" alt="Chatbot" width="30%" style="margin: 5px;"/> <img src="assets/photo_2025-04-09_21-04-03.jpg" alt="Growth Graphs" width="30%" style="margin: 5px;"/> <img src="assets/photo_2025-04-09_21-03-58.jpg" alt="Profile" width="30%" style="margin: 5px;"/> </div>
 
