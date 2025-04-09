@@ -225,7 +225,7 @@ class _InputScreenState extends State<InputScreen> {
               ],
             ),
             SizedBox(height: 20),
-            _buildSectionTitle("🎂 Age"),
+            _buildSectionTitle("🎂 Age (Months)"),
             _buildCard(
               TextField(
                 controller: ageController,
