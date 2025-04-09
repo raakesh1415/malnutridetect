@@ -68,6 +68,24 @@ NutriCare contributes to the following **UN Sustainable Development Goals (SDGs)
 
 ## 📷 Screenshots
 
+### 🧒 Login Interface
+![Growth Graph](assets/photo_2025-04-09_21-04-10.jpg)
+
+### 🧒 Dashboard Interface
+![Growth Graph](assets/photo_2025-04-09_21-04-07.jpg)
+
+### 🧒 Malnutrition Input Interface
+![Growth Graph](assets/photo_2025-04-09_21-03-55.jpg)
+
+### 🤖 Malnutrition Insights 
+![Chatbot Feature](assets/photo_2025-04-09_21-04-01.jpg)
+
+### 🤖 Chatbot Interface
+![Chatbot Feature](assets/photo_2025-04-09_21-04-05.jpg)
+
 ### 🧒 Child Growth Graphs
 ![Growth Graph](assets/photo_2025-04-09_21-04-03.jpg)
+
+### 🧒 Profile Interface
+![Growth Graph](assets/photo_2025-04-09_21-03-58.jpg)
 
