@@ -68,5 +68,6 @@ NutriCare contributes to the following **UN Sustainable Development Goals (SDGs)
 
 ## 📷 Screenshots
 
-
+### 🧒 Child Growth Graphs
+![Growth Graph](assets/photo_2025-04-09_21-04-03.jpg)
 
