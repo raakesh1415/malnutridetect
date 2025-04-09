@@ -68,14 +68,5 @@ NutriCare contributes to the following **UN Sustainable Development Goals (SDGs)
 
 ## 📷 Screenshots
 
-> _[Add app screenshots and chatbot conversation examples here]_  
-> _Graphs, dashboard UI, and chatbot interface highly recommended._
 
----
 
-## 📦 How to Run Locally
-
-1. **Clone the Repository**  
-   ```bash
-   git clone https://github.com/your-username/nutricare.git
-   cd nutricare
