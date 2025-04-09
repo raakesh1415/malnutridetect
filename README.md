@@ -31,7 +31,7 @@ Whether you're a parent, caregiver, or healthcare worker, NutriCare empowers you
 ### 💬 Smart Nutrition Chatbot
 - Ask questions about child health and nutrition 24/7.
 - Get guidance on meal planning, symptom checking, and balanced diets.
-- Available in conversational format for better accessibility.
+- Available in conversational format for better accessibility using Gemini.
 
 ### 👶 Multi-Child Profile Management
 - Add and manage multiple children's data.
