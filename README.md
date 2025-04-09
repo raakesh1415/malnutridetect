@@ -60,7 +60,7 @@ NutriCare contributes to the following **UN Sustainable Development Goals (SDGs)
 
 - **Frontend:** Flutter (Dart)
 - **Backend:** Firebase (Auth + Firestore)
-- **AI Chatbot:** Dialogflow / Custom NLP integration
+- **AI Chatbot:** Dialogflow / Custom NLP integration / Gemini
 - **Charts & Graphs:** Custom Flutter chart packages
 - **Platform:** Cross-platform (Android & iOS)
 
